@@ -61,15 +61,10 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    private final String[] adminRoles = {
-            "ROLE_ADMIN",
-            "ROLE_SUPER_ADMIN",
-    };
-
     private final String[] permitSwagger = {
-            "v3/api-docs/**",
-            "v3/api-docs.yanl",
-            "swagger-ui/**",
-            "swagger-ui.html"
+            "/v3/api-docs/**",
+            "/v3/api-docs.yanl",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     };
 }

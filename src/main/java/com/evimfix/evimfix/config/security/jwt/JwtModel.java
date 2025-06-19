@@ -6,24 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtModel {
-    private UUID userId;
+    private Long userId;
     private String email;
     private String username;
-    private long refreshTokenExpire;
+    private long tokenExpiration;
     private Set<ERole> roles;
     private String jwtToken;
 
-    public JwtModel(UUID userId, String username, String email, long refreshTokenExpire, Set<ERole> roles) {
+    public JwtModel(Long userId, String username, String email, long tokenExpiration, Set<ERole> roles) {
         this.userId = userId;
         this.email = email;
         this.username = username;
-        this.refreshTokenExpire = refreshTokenExpire;
+        this.tokenExpiration = tokenExpiration;
         this.roles = roles;
     }
 }

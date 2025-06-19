@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode implements StatusCode {
     PERMISSION_DENIED(4000, HttpStatus.UNAUTHORIZED,"permission denied"),
     UNEXPECTED_ERROR(4001, HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error"),
-    ROLE_NOT_FOUND(4002, HttpStatus.NOT_FOUND, "Role not found"),;
+    ROLE_NOT_FOUND(4002, HttpStatus.NOT_FOUND, "Role not found"),
+    USER_NOT_FOUND(4003, HttpStatus.NOT_FOUND, "User not found"),
+    USERNAME_OR_PASSWORD_INCORRECT(4004, HttpStatus.BAD_REQUEST, "Username or password incorrect"),
+    UNKNOWN_ROLE(4005, HttpStatus.INTERNAL_SERVER_ERROR, "Unknown role"),;
 
     private final int code;
     private final HttpStatus httpCode;

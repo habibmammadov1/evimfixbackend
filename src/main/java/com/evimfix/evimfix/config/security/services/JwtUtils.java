@@ -45,16 +45,11 @@ public class JwtUtils {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
-        if (jwtModel.getUserId().toString().equals("ed01ba0b-d2e0-4854-8298-939e7e6f83b3")) {
-            expiryDate = new Date(now.getTime() + 60 * 1000);
-        }
-
         JwtBuilder jwt = Jwts.builder()
                 .setSubject(jwtModel.getEmail())
                 .claim("userId", jwtModel.getUserId().toString())
                 .claim("username", jwtModel.getUsername())
                 .claim("roles", jwtModel.getRoles().stream().map(Enum::name).toList())
-                .claim("refreshTokenExpire", jwtModel.getRefreshTokenExpire())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512);
@@ -65,11 +60,10 @@ public class JwtUtils {
     public JwtModel getJwtModelFromToken(String token) {
         Claims claims = parseJwtToken(token);
 
-        boolean hasProfile = claims.get("hasProfile", Boolean.class);
-        UUID userId = UUID.fromString(claims.get("userId", String.class));
+        Long userId = claims.get("userId", Long.class);
         String username = claims.get("username", String.class);
         String email = claims.getSubject();
-        long refreshTokenExpire = claims.get("refreshTokenExpire", Long.class);
+
 
         Object rolesObj = claims.get("roles");
 
@@ -84,36 +78,10 @@ public class JwtUtils {
             case "ROLE_ADMIN" -> ERole.ROLE_ADMIN;
             case "ROLE_SUPER_ADMIN" -> ERole.ROLE_SUPER_ADMIN;
             default ->
-                    throw new BaseException(ErrorCode.ROLE_NOT_FOUND);
+                    throw new BaseException(ErrorCode.UNKNOWN_ROLE);
         }).collect(Collectors.toSet());
 
-        return new JwtModel(userId, email, username, refreshTokenExpire, roleSet, token);
-    }
-
-    private long getRefreshTokenExpiration(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("refreshTokenExpire", Long.class);
-    }
-
-    public long getRefreshTokenRemainingTime(String token) {
-        long expirationTime = getRefreshTokenExpiration(token);
-        long currentTime = System.currentTimeMillis();
-        return (expirationTime - currentTime) / 1000;
-    }
-
-    public long getExpiration(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        Date expiration = claims.getExpiration();
-        return (expiration.getTime() - System.currentTimeMillis()) / 1000;
+        return new JwtModel(userId, email, username, claims.getExpiration().getTime(), roleSet, token);
     }
 
     public boolean validateJwtToken(String authToken) {

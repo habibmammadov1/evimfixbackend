@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum SuccessCode implements StatusCode {
-    SUCCESS(1000, HttpStatus.CREATED,"process successful completed"),;
+    SUCCESS(1000, HttpStatus.CREATED,"process successful completed"),
+    USER_SUCCESSFULLY_LOGGED_IN(2000, HttpStatus.OK, "user successfully logged in"),;
 
     private final int code;
     private final HttpStatus httpCode;

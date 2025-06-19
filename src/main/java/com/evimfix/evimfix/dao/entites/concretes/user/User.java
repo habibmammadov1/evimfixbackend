@@ -2,12 +2,12 @@ package com.evimfix.evimfix.dao.entites.concretes.user;
 
 import com.evimfix.evimfix.dao.entites.abstracts.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Table(name = "users")
 public class User extends BaseEntity {
 
@@ -23,4 +24,8 @@ public class User extends BaseEntity {
     private String username;
     private String email;
     private String password;
+
+    @ManyToMany
+    private List<Role> roles;
+
 }
