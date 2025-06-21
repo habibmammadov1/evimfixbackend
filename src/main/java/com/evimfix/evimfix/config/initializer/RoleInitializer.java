@@ -15,13 +15,13 @@ public class RoleInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (roleRepository.existsByName(ERole.ROLE_ADMIN.name())) {
+        if (!roleRepository.existsByName(ERole.ROLE_ADMIN.name())) {
             roleRepository.save(Role.builder().name(ERole.ROLE_ADMIN.name()).build());
         }
-        if (roleRepository.existsByName(ERole.ROLE_USER.name())) {
+        if (!roleRepository.existsByName(ERole.ROLE_USER.name())) {
             roleRepository.save(Role.builder().name(ERole.ROLE_USER.name()).build());
         }
-        if (roleRepository.existsByName(ERole.ROLE_SUPER_ADMIN.name())) {
+        if (!roleRepository.existsByName(ERole.ROLE_SUPER_ADMIN.name())) {
             roleRepository.save(Role.builder().name(ERole.ROLE_SUPER_ADMIN.name()).build());
         }
     }
