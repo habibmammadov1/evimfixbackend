@@ -14,7 +14,8 @@ public enum ErrorCode implements StatusCode {
     USER_NOT_FOUND(4003, HttpStatus.NOT_FOUND, "User not found"),
     USERNAME_OR_PASSWORD_INCORRECT(4004, HttpStatus.BAD_REQUEST, "Username or password incorrect"),
     UNKNOWN_ROLE(4005, HttpStatus.INTERNAL_SERVER_ERROR, "Unknown role"),
-    USER_ALREADY_EXISTS(4006, HttpStatus.BAD_REQUEST, "User already exists"),;
+    USER_ALREADY_EXISTS(4006, HttpStatus.BAD_REQUEST, "User already exists"),
+    PASSWORD_CANNOT_BE_EMPTY(4007, HttpStatus.BAD_REQUEST, "Password cannot be empty"),;
 
     private final int code;
     private final HttpStatus httpCode;

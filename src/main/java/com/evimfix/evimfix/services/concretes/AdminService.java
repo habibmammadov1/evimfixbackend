@@ -6,6 +6,7 @@ import com.evimfix.evimfix.core.utilities.results.DataResult;
 import com.evimfix.evimfix.core.utilities.results.Result;
 import com.evimfix.evimfix.core.utilities.results.SuccessDataResult;
 import com.evimfix.evimfix.core.utilities.results.SuccessResult;
+import com.evimfix.evimfix.dao.entites.concretes.user.Role;
 import com.evimfix.evimfix.dao.entites.concretes.user.User;
 import com.evimfix.evimfix.dao.model.enums.ERole;
 import com.evimfix.evimfix.dao.model.request.CreateAdminRequest;
@@ -21,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,14 +63,21 @@ public class AdminService implements IAdminService {
     }
 
     @Override
+    @Transactional
     public Result create(CreateAdminRequest createAdminRequest) {
 
         if (userRepository.existsByUsername(createAdminRequest.getUsername())) {
             throw new BaseException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
+        if (userRepository.existsByEmail(createAdminRequest.getEmail())) {
+            throw new BaseException(ErrorCode.USER_ALREADY_EXISTS);
+        }
+
         User admin = adminMapper.createAdminRequestToUser(createAdminRequest);
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        admin.setRoles(List.of(Role.builder().id(ERole.ROLE_ADMIN.getId()).build()));
+
+        admin.setPassword(passwordEncoder.encode(createAdminRequest.getPassword()));
         userRepository.save(admin);
         return new SuccessResult(SuccessCode.ADMIN_SUCCESSFULLY_CREATED);
     }
