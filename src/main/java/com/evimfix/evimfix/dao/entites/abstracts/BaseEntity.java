@@ -1,10 +1,11 @@
 package com.evimfix.evimfix.dao.entites.abstracts;
 
+import com.evimfix.evimfix.dao.entites.concretes.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -22,10 +23,15 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String status;
 
-    @CreatedDate
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    private User creatorId;
+
+    @CreationTimestamp
     private LocalDateTime createDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime updateDate;
 }

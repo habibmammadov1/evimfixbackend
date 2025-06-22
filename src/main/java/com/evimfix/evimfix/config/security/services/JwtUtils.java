@@ -60,7 +60,7 @@ public class JwtUtils {
     public JwtModel getJwtModelFromToken(String token) {
         Claims claims = parseJwtToken(token);
 
-        Long userId = claims.get("userId", Long.class);
+        Long userId = Long.parseLong(claims.get("userId", String.class));
         String username = claims.get("username", String.class);
         String email = claims.getSubject();
 

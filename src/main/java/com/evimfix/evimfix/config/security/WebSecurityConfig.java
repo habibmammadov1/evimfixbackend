@@ -50,8 +50,9 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/v1/auth/**").permitAll()
+                        auth.requestMatchers("/v1/admin/sign-in").permitAll()
                                 .requestMatchers(permitSwagger).permitAll()
+                                .requestMatchers("/v1/admin/**").hasAnyAuthority(adminRoles)
                                 .anyRequest().authenticated()
                 );
 
@@ -60,6 +61,11 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+    private final String[] adminRoles = {
+            "ROLE_ADMIN",
+            "ROLE_SUPER_ADMIN",
+    };
 
     private final String[] permitSwagger = {
             "/v3/api-docs/**",
